@@ -1,0 +1,29 @@
+  -------------------------------------------
+  -- SQL Q1
+  -------------------------------------------
+
+  -- foods with storage
+  drop table NonMeetWithStorage
+
+  select f.FoodCode, s.StorageMethod into NonMeetWithStorage
+  from [ICS].[dbo].[FoodStorages] s
+  full join [ICS].[dbo].[Foods] f on f.FoodCode = s.FoodCode
+  where f.IsMeat != 1 and f.FoodCode IS NOT NULL
+  order by f.FoodCode, s.StorageMethod
+
+  select * from NonMeetWithStorage
+  order by FoodCode, StorageMethod
+
+  -- food with no tin
+   drop table FoodWithNoTin
+
+  select * into FoodWithNoTin
+  from FoodStorages s
+  where s.StorageMethod != 'Tin'
+  order by FoodCode, StorageMethod
+
+  select * from FoodWithNoTin
+
+  -- non meat foods and their storage method when the storage method is not tins and they have any storage method (including tins)
+  select distinct s.FoodCode, n.StorageMethod from FoodStorages s
+  left join FoodWithNoTin n on s.FoodCode = n.FoodCode

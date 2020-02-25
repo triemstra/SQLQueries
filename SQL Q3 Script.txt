@@ -1,0 +1,39 @@
+------------------------------------
+-- SQL Q 3
+------------------------------------
+
+-- Pivot Table OfficeFacilities
+drop table PivotTable
+
+SELECT * into PivotTable
+FROM
+(
+    SELECT [OfficeKeyCode],
+           [FacilityCode],
+		   [ServiceLevel]
+    FROM OfficeFacilities
+) AS SourceTable PIVOT(SUM([ServiceLevel]) FOR [FacilityCode] IN([Parking], [MeetingRooms], [TeleCon])) AS PivotTable;
+
+select * from PivotTable
+
+-- Find parents
+  With cte 
+  as (
+		  select KeyCode, ParentKeyCode from Offices
+		  union all
+		  select c.KeyCode, o.ParentKeyCode
+		  from cte c join Offices o on c.ParentKeyCode = o.KeyCode
+	  )
+  select c.KeyCode, c.ParentKeyCode 'KeyCode', o.OfficeName, ROW_NUMBER() OVER(Partition BY c.KeyCode ORDER BY c.KeyCode) as [Level], p.* --distinct c.KeyCode, c.ParentKeyCode --into ParentOffices 
+  from cte c
+  left join PivotTable p on c.ParentKeyCode = p.OfficekeyCode
+  left join Offices o on o.KeyCode = p.OfficeKeyCode
+  where c.ParentKeyCode IS NOT NULL
+  and c.KeyCode = 'PNT'
+  union
+  select o.KeyCode, o.KeyCode, o.OfficeName, 0, p.*
+  from Offices o
+  --left join cte c on c.KeyCode = o.KeyCode
+  left join PivotTable p on o.KeyCode = p.OfficeKeyCode
+  where o.KeyCode = 'PNT'
+  order by Level

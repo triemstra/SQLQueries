@@ -1,0 +1,47 @@
+-----------------------------------
+-- SQL Q2
+-----------------------------------
+
+DECLARE @Date date
+
+DECLARE @Counter int
+
+SET @Counter = 0
+ 
+SET @Date = CONVERT(DATE, '2019-08-15')
+
+SET @Date = DATEADD(month, DATEDIFF(month, 0, @Date), 0)
+
+select @Date 'Date'
+
+;WITH CTE AS
+(
+    SELECT 
+		number = @Counter + 1,
+        @Date AS [Date], 
+        MONTH(@Date) As [Month],
+        DATENAME (MONTH,@Date) AS [MonthName],
+        DATENAME (DW,@Date) AS [DayName]
+    UNION ALL
+    SELECT 
+		number = @Counter + 1,
+        DATEADD(DAY,1,[DATE]) AS [Date],
+        MONTH(DATEADD(DAY,1,[DATE])) AS [Month],
+        DATENAME (MONTH,DATEADD(DAY,1,[DATE])) AS [MonthName],
+        DATENAME (DW ,DATEADD(DAY,1,[DATE])) AS [DayName] 
+    FROM 
+        CTE 
+    WHERE 
+        YEAR(DATEADD(DAY,1,[DATE]) )=YEAR(@Date)
+        AND MONTH(DATEADD(DAY,1,[DATE]))=MONTH(@Date)
+)
+SELECT --*
+     ROW_NUMBER() OVER(ORDER BY Date), DayName, Date	--, Month, MonthName, DayName
+FROM 
+    CTE 
+WHERE 
+    [DayName] NOT IN ('Saturday','Sunday') 
+ORDER BY 
+    [DATE]
+OPTION 
+    (MAXRECURSION 367)
