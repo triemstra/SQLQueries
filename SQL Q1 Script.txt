@@ -2,8 +2,64 @@
   -- SQL Q1
   -------------------------------------------
 
-  -- foods with storage
-  drop table NonMeetWithStorage
+I want to see all of the non meat foods and their storage method when the storage method is not tins and they have any storage method (including tins)
+
+FoodCode	StorageMethod
+----------------------------
+Apples		Jar
+Chillies	Jar
+Chillies	Sack
+Pears		NULL
+Rice		Sack
+Tomatos		NULL
+
+CREATE TABLE [dbo].[Foods](
+	[FoodCode] [varchar](50) NOT NULL,
+	[IsMeat] [bit] NOT NULL
+) ON [PRIMARY]
+
+GO
+
+CREATE TABLE [dbo].[FoodStorages](
+	[FoodCode] [varchar](50) NOT NULL,
+	[StorageMethod] [varchar](50) NOT NULL
+) ON [PRIMARY]
+
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Tomatos', 0)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Pears', 0)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Chillies', 0)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Apples', 0)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Beef', 1)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Chicken', 1)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Rice', 0)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Cheese', 0)
+GO
+INSERT [dbo].[Foods] ([FoodCode], [IsMeat]) VALUES (N'Tofu', 0)
+GO
+INSERT [dbo].[FoodStorages] ([FoodCode], [StorageMethod]) VALUES (N'Tomatos', N'Tin')
+GO
+INSERT [dbo].[FoodStorages] ([FoodCode], [StorageMethod]) VALUES (N'Pears', N'Tin')
+GO
+INSERT [dbo].[FoodStorages] ([FoodCode], [StorageMethod]) VALUES (N'Chillies', N'Jar')
+GO
+INSERT [dbo].[FoodStorages] ([FoodCode], [StorageMethod]) VALUES (N'Apples', N'Jar')
+GO
+INSERT [dbo].[FoodStorages] ([FoodCode], [StorageMethod]) VALUES (N'Chillies', N'Sack')
+GO
+INSERT [dbo].[FoodStorages] ([FoodCode], [StorageMethod]) VALUES (N'Apples', N'Tin')
+GO
+INSERT [dbo].[FoodStorages] ([FoodCode], [StorageMethod]) VALUES (N'Rice', N'Sack')
+GO
+
+================================================================================================
 
   select f.FoodCode, s.StorageMethod into NonMeetWithStorage
   from [ICS].[dbo].[FoodStorages] s
@@ -14,9 +70,6 @@
   select * from NonMeetWithStorage
   order by FoodCode, StorageMethod
 
-  -- food with no tin
-   drop table FoodWithNoTin
-
   select * into FoodWithNoTin
   from FoodStorages s
   where s.StorageMethod != 'Tin'
@@ -24,6 +77,7 @@
 
   select * from FoodWithNoTin
 
-  -- non meat foods and their storage method when the storage method is not tins and they have any storage method (including tins)
-  select distinct s.FoodCode, n.StorageMethod from FoodStorages s
+  -- Select non meat foods and their storage method when the storage method is not tins and they have any storage method (including tins)
+  select distinct s.FoodCode, n.StorageMethod 
+  from FoodStorages s
   left join FoodWithNoTin n on s.FoodCode = n.FoodCode
