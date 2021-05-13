@@ -2,6 +2,83 @@
 -- SQL Q 3
 ------------------------------------
 
+We have a table of offices and their parent offices.  Each office has different levels of services.
+We need a query that when an office code is selected it is able to present the office and all of its respective parent offices 
+along with which services the repective offices can offer.
+It should show the level as in how many steps away from the selected office is in terms of the hierarchy.
+
+
+e.g. if the selected code is 'PNT' the response would be:
+
+KeyCode	OfficeName		Level		Parking	  		MeetingRooms			TeleCon
+--------------------------------------------------------------------------------------------------------------------
+PNT	    Pokolbin North		0		NULL	  		1				3
+POK	    Pokolbin			1		2		  	3				2
+MAI	    Maitland			2		7		  	NULL				NULL
+SYD	    Sydney Head Office		3		2		  	5				3
+
+
+
+Please use the following scripts in SQL server to generate the required tables and sample data;
+
+
+CREATE TABLE [dbo].[OfficeFacilities](
+	[OfficeKeyCode] [varchar](50) NOT NULL,
+	[FacilityCode] [varchar](50) NOT NULL,
+	[ServiceLevel] [smallint] NULL
+) ON [PRIMARY]
+
+
+CREATE TABLE [dbo].[Offices](
+	[KeyCode] [varchar](50) NOT NULL,
+	[ParentKeyCode] [varchar](50) NULL,
+	[OfficeName] [varchar](50) NOT NULL
+) ON [PRIMARY]
+
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'BTH', N'Parking', 1)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'BTH', N'TeleCon', 4)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'MAI', N'Parking', 7)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'MIL', N'MeetingRooms', 2)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'ORG', N'Parking', 6)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'ORG', N'TeleCon', 1)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'PNT', N'MeetingRooms', 1)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'PNT', N'TeleCon', 3)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'POK', N'MeetingRooms', 3)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'POK', N'Parking', 2)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'POK', N'TeleCon', 2)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'SYD', N'MeetingRooms', 5)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'SYD', N'Parking', 2)
+GO
+INSERT [dbo].[OfficeFacilities] ([OfficeKeyCode], [FacilityCode], [ServiceLevel]) VALUES (N'SYD', N'TeleCon', 3)
+GO
+INSERT [dbo].[Offices] ([KeyCode], [ParentKeyCode], [OfficeName]) VALUES (N'BTH', N'SYD', N'Bathurst')
+GO
+INSERT [dbo].[Offices] ([KeyCode], [ParentKeyCode], [OfficeName]) VALUES (N'MAI', N'SYD', N'Maitland')
+GO
+INSERT [dbo].[Offices] ([KeyCode], [ParentKeyCode], [OfficeName]) VALUES (N'MIL', N'BTH', N'Milthorpe Sub Branch')
+GO
+INSERT [dbo].[Offices] ([KeyCode], [ParentKeyCode], [OfficeName]) VALUES (N'ORG', N'BTH', N'Orange Sub Branch')
+GO
+INSERT [dbo].[Offices] ([KeyCode], [ParentKeyCode], [OfficeName]) VALUES (N'PNT', N'POK', N'Pokolbin North')
+GO
+INSERT [dbo].[Offices] ([KeyCode], [ParentKeyCode], [OfficeName]) VALUES (N'POK', N'MAI', N'Pokolbin')
+GO
+INSERT [dbo].[Offices] ([KeyCode], [ParentKeyCode], [OfficeName]) VALUES (N'SYD', NULL, N'Sydney Head Office')
+GO
+
 -- Pivot Table OfficeFacilities
 drop table PivotTable
 
