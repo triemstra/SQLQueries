@@ -2,6 +2,27 @@
 -- SQL Q2
 -----------------------------------
 
+Write a Query that takes in a date and returns a list of all weekdays in its given month along with the business day position of that day
+
+e.g. if you ran it for '12/JAN/2020' it would return
+
+#       Day          Date
+------------------------------
+1       Tuesday      2020-12-01
+2       Wednesday    2020-12-02
+3       Thursday     2020-12-03
+4       Friday       2020-12-04
+5       Monday       2020-12-07
+6       Tuesday      2020-12-08
+
+18      Thursday     2020-12-24
+19      Friday       2020-12-25
+20      Monday       2020-12-28
+21      Tuesday      2020-12-29
+22      Wednesday    2020-12-30
+23      Thursday     2020-12-31
+
+
 DECLARE @Date date
 
 DECLARE @Counter int
