@@ -2,7 +2,8 @@
   -- SQL Q1
   -------------------------------------------
 
-I want to see all of the non meat foods and their storage method when the storage method is not tins and they have any storage method (including tins)
+-- Select all of the non meat foods and their storage method when the storage method is not tins and they have any storage method (including tins)
+--================================================================================================================================================
 
 FoodCode	StorageMethod
 ----------------------------
